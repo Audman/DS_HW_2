@@ -241,9 +241,7 @@ public class PositionalMergeSort<E extends Comparable<E>>
         // Maybe I should use iterators, but "If it works don't touch it"
         while(i != null || j != null)
         {
-            if (j == null ||
-                i != null &&
-                    i.getElement().compareTo(j.getElement()) < 0
+            if (j == null || i != null && i.getElement().compareTo(j.getElement()) < 0
             ) {
                 S.addLast(i.getElement());
                 i = S1.after(i);
