@@ -238,6 +238,7 @@ public class PositionalMergeSort<E extends Comparable<E>>
         while (!S.isEmpty())
             S.remove(S.last());
 
+        // Maybe I should use iterators, but "If it works don't touch it"
         while(i != null || j != null)
         {
             if (j == null ||
@@ -256,6 +257,8 @@ public class PositionalMergeSort<E extends Comparable<E>>
 
     public static void main(String[] args) {
         LinkedPositionalList<Integer> list = new LinkedPositionalList<>();
+
+        // Absolutely random numbers
         for (int i = 50; i > 30; i--)
             list.addLast(i);
 
