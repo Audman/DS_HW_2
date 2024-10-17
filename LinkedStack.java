@@ -20,6 +20,11 @@ class SinglyLinkedList<E> implements Cloneable {
             next = n;
         }
 
+        public Node(Node<E> n) {
+            element = n.getElement();
+            next = n.getNext();
+        }
+
         public E getElement() { return element; }
 
         public Node<E> getNext() { return next; }
@@ -27,7 +32,7 @@ class SinglyLinkedList<E> implements Cloneable {
         public void setNext(Node<E> n) { next = n; }
     }
 
-    private Node<E> head = null;
+    Node<E> head = null;
     private Node<E> tail = null;
     int size = 0;
     public SinglyLinkedList() { }
@@ -124,9 +129,9 @@ public class LinkedStack<E> implements Stack<E>, Iterable<E>
         private SinglyLinkedList.Node<E> current;
         private SinglyLinkedList.Node<E> previous;
 
-        public LinkedStackIterator()
+        public LinkedStackIterator ()
         {
-            current = (SinglyLinkedList.Node<E>) top();
+            current = values.head;
             previous = null;
         }
 
@@ -158,7 +163,7 @@ public class LinkedStack<E> implements Stack<E>, Iterable<E>
             if ( previous == top() ) { pop(); }
             else
             {
-                SinglyLinkedList.Node<E> temp = (SinglyLinkedList.Node<E>) top();
+                SinglyLinkedList.Node<E> temp = values.head;
 
                 while ( temp.getNext() != previous)
                     temp = temp.getNext();
@@ -172,10 +177,33 @@ public class LinkedStack<E> implements Stack<E>, Iterable<E>
 
     SinglyLinkedList<E> values;
 
+    public LinkedStack ()
+    {
+        values = new SinglyLinkedList<>();
+    }
+
     public int size() { return values.size(); }
     public boolean isEmpty() { return values.isEmpty(); }
     public void push(E e) { values.addFirst(e); }
     public E top() { return values.first(); }
     public E pop() { return values.removeFirst(); }
     public Iterator<E> iterator() { return new LinkedStackIterator(); }
+
+    public static void main(String[] args) {
+
+        LinkedStack<Integer> stack = new LinkedStack<>();
+        for (int i = 0; i < 10; i++) stack.push(5*i+3);
+
+        Iterator<Integer> iterator = stack.iterator();
+        int something = 0;
+
+        while (iterator.hasNext())
+        {
+            iterator.next();
+            something++;
+            if(something == 4) iterator.remove();
+        }
+
+        for (Integer e : stack) System.out.print(e + " ");
+    }
 }
