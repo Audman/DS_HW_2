@@ -201,8 +201,14 @@ public class LinkedStack<E> implements Stack<E>, Iterable<E>
         {
             iterator.next();
             something++;
-            if(something == 4) iterator.remove();
+            if(something == 4)
+            {
+                System.out.println(stack.size());
+                iterator.remove();
+                System.out.println(stack.size());
+            }
         }
+        System.out.println();
 
         for (Integer e : stack) System.out.print(e + " ");
     }

@@ -257,7 +257,7 @@ public class PositionalMergeSort<E extends Comparable<E>>
         LinkedPositionalList<Integer> list = new LinkedPositionalList<>();
 
         // Absolutely random numbers
-        for (int i = 50; i > 30; i--)
+        for (int i = 70; i > 30; i-=2)
             list.addLast(i);
 
         PositionalMergeSort<Integer> sorter = new PositionalMergeSort<>();

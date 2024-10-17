@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Iterator;
 
 interface List<E> extends Iterable<E> {
@@ -8,7 +9,6 @@ interface List<E> extends Iterable<E> {
     void add(int i, E e) throws IndexOutOfBoundsException;
     E remove(int i) throws IndexOutOfBoundsException;
 }
-
 class DoublyLinkedList<E> {
     private static class Node<E> {
         private E element;               // reference to the element stored at this node
@@ -106,29 +106,108 @@ class DoublyLinkedList<E> {
     }
 }
 
-public class LinkedList<E> implements List<E>
+public class LinkedList<E> extends DoublyLinkedList<E> implements List<E>
 {
-    private int size;
+    private DoublyLinkedList<E> dll = new DoublyLinkedList<>();
 
-    public int size() { return size; }
+    // O(n), as it "rotates" all the list
+    public E get(int i) throws IndexOutOfBoundsException
+    {
+        checkIndex(i, dll.size());
 
-    public boolean isEmpty() { return size == 0; }
+        E returnValue = dll.first();
 
-    public E get(int i) throws IndexOutOfBoundsException {
-        return null;
+        for (int j = 0; j < size(); j++)
+        {
+            dll.addLast(dll.removeFirst());
+            if(i == j) returnValue = dll.first();
+        }
+
+        return returnValue;
     }
 
-    public E set(int i, E e) throws IndexOutOfBoundsException {
-        return null;
+    // O(n), as it "rotates" all the list
+    public E set(int i, E e) throws IndexOutOfBoundsException
+    {
+        checkIndex(i, dll.size());
+        E returnValue = dll.first();
+
+        for (int j = 0; j < size(); j++)
+        {
+            dll.addLast(dll.removeFirst());
+            if( i==j )
+            {
+                returnValue = dll.removeFirst();
+                dll.addFirst(e);
+            }
+        }
+
+        return returnValue;
     }
 
-    public void add(int i, E e) throws IndexOutOfBoundsException {
+    // O(n), as it "rotates" all the list
+    public void add(int i, E e) throws IndexOutOfBoundsException
+    {
+        checkIndex(i, dll.size());
 
+        if(i == 0){
+            dll.addFirst(e);
+        }
+        else
+        {
+            for (int j = 0; j < size(); j++)
+            {
+                dll.addLast(dll.removeFirst());
+
+                if (i == j) dll.addFirst(e);
+            }
+        }
     }
 
-    public E remove(int i) throws IndexOutOfBoundsException {
-        return null;
+    // O(n), as it "rotates" all the list
+    public E remove(int i)throws IndexOutOfBoundsException
+    {
+        checkIndex(i, dll.size());
+        E returnValue = dll.first();
+
+        for (int j = 0; j < size(); j++) {
+            dll.addLast(dll.removeFirst());
+            if(i==j) returnValue = dll.removeFirst();
+        }
+
+        return returnValue;
     }
 
+    // O(1)
     public Iterator<E> iterator() { return null; }
+
+    // O(1)
+    protected void checkIndex(int i, int n) throws IndexOutOfBoundsException {
+        if (i < 0 || i > dll.size()) throw new IndexOutOfBoundsException("Illegal index: "  + i);
+    }
+
+    public static void main(String[] args)
+    {
+        ArrayList<Integer> arrayList = new ArrayList<>();
+        LinkedList<Integer> linkedList = new LinkedList<>();
+
+        long startTime = System.nanoTime();
+
+        for(int i = 10000; i >= 0; i--)
+            linkedList.add(0, i);
+
+        long finishTime = System.nanoTime();
+        long linkedTime = finishTime - startTime;
+
+        startTime = System.nanoTime();
+
+        for(int i = 10000; i >= 0; i--)
+            arrayList.add(0, i);
+
+        finishTime = System.nanoTime();
+        long arrayTime = finishTime - startTime;
+
+        System.out.println("ArrayList:  " + arrayTime);
+        System.out.println("LinkedList: " + linkedTime);
+    }
 }
